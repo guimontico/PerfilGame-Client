@@ -1,5 +1,5 @@
-<main class="w-full flex p-4 box-border relative">
-  <div class="flex justify-around w-full mb-3">
+<main class="w-full flex flex-col box-border relative">
+  <header class="flex justify-around w-full mb-3">
     <h1 class="text-3xl font-bold font-inter">Perfil AI Game</h1>
     @if (hasSession) {
     <button
@@ -16,7 +16,12 @@
       Sign in with Google
     </button>
     }
-  </div>
+  </header>
+  <section class="flex">
+    @if (hasSession) {
+    <app-home />
+    }
+  </section>
 </main>
 
 <router-outlet></router-outlet>
