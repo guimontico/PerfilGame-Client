@@ -18,23 +18,33 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.authService.initClient();
-    this.authService.getSession().subscribe(
-      (session) => {
-        this.hasSession = session !== null;
+    this.authService.getSession().subscribe({
+      next: (v) => {
+        console.log(v);
+        this.hasSession = v !== null;
       },
-      (error) => {
-        console.error(error);
-      }
-    );
-  }
-
-  async signInWithGoogle(): Promise<void> {
-    this.authService.supabase.auth.signInWithOAuth({
-      provider: 'google',
+      error: (e) => {
+        console.error(e);
+      },
     });
   }
 
-  signOut(): void {
-    this.authService.supabase.auth.signOut();
+  async signInWithGoogle(): Promise<void> {
+    const { data, error } =
+      await this.authService.supabase.auth.signInWithOAuth({
+        provider: 'google',
+      });
+
+    console.log(data);
+    console.log(error);
+  }
+
+  async signOut(): Promise<void> {
+    this.authService.supabase.auth.setSession({
+      access_token: '',
+      refresh_token: '',
+    });
+    const { error } = await this.authService.supabase.auth.signOut();
+    console.log(error);
   }
 }
